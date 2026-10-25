@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+/* Full-page mode: desktop-sized viewports where every section is one screen. Keep in sync with ScrollNav. */
+@custom-variant fp (@media (min-width: 1024px) and (min-height: 640px));
+
+/* Dark is the default theme; the light values below override these tokens. */
+@theme {
+  --color-ink: #060914;
+  --color-panel: #0d1326;
+  --color-panel-2: #131b36;
+  --color-line: #232d4d;
+  --color-brand: #22387c;
+  --color-brand-bright: #4f6fe0;
+  --color-neon: #1fe894;
+  --color-neon-text: #1fe894;
+  --color-heat: #ff6a2b;
+  --color-heat-text: #ff6a2b;
+  --color-heat-surface: #1a0d08;
+  --color-on-accent: #060914;
+  --color-heading: #ffffff;
+  --color-body: #dfe5f3;
+  --color-muted: #94a0bd;
+  --font-sans: var(--font-usav-body), "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-usav-display), "Arial Narrow", sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+  --grid-line: rgb(255 255 255 / 0.035);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --color-ink: #f4f6fb;
+  --color-panel: #ffffff;
+  --color-panel-2: #e9edf7;
+  --color-line: #d3d9e8;
+  --color-brand-bright: #2f4fc4;
+  --color-neon-text: #0a7a4c;
+  --color-heat-text: #d2460c;
+  --color-heat-surface: #ffeadd;
+  --color-heading: #0b1230;
+  --color-body: #26304a;
+  --color-muted: #5a6582;
+  --grid-line: rgb(20 35 90 / 0.06);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-body);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-neon);
+  color: var(--color-on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-neon-text);
+  outline-offset: 3px;
+}
+
+/* Angled corner used on buttons and tags, echoing the slashes in the tournament artwork. */
+.clip-slant {
+  clip-path: polygon(0.75rem 0, 100% 0, calc(100% - 0.75rem) 100%, 0 100%);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Blocks slide in as their section scrolls into view. */
+.reveal {
+  opacity: 0;
+  transform: translateY(2.5rem);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Full-page mode: each section fills one screen and ScrollNav moves between them one at a time. */
+@media (min-width: 1024px) and (min-height: 640px) {
+  html {
+    scroll-padding-top: 0;
+  }
+  .panel {
+    display: flex;
+    min-height: 100dvh;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 5rem 1.5rem;
+  }
+  /* Leaves room for the ticker strip at the bottom of the first screen. */
+  .panel-hero {
+    min-height: calc(100dvh - 3.125rem);
+  }
+  .panel > .max-w-6xl {
+    width: 100%;
+    padding-block: 0;
+  }
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 32s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-ticker {
+    animation: none;
+  }
+}
